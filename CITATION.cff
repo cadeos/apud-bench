@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use apud-bench, please cite it and the original datasets of the subsets you use."
+title: "apud-bench: transcription, grounding and citation faithfulness of VLMs on historical manuscripts"
+type: software
+authors:
+  - given-names: Carmine
+    family-names: De Stefano
+    alias: cadeos
+repository-code: "https://github.com/cadeos/apud-bench"
+license: Apache-2.0
+version: 0.0.1
+keywords:
+  - benchmark
+  - handwritten text recognition
+  - visual grounding
+  - manuscripts
+  - vision-language models
+  - IIIF

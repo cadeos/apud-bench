@@ -1,0 +1,99 @@
+# Benchmark subsets, v0 draft (2026-10-26)
+#
+# Tiers
+#   core          permissive or share-alike open licences: CC-BY, CC0, Apache-2.0, MIT,
+#                 Etalab OL 2.0, CC-BY-SA (flagged share-alike)
+#   nc-extension  any NonCommercial licence, distributed as a separate subset
+#   hold          eligible on paper but licence or access still to confirm
+#
+# Licence rule: when the HTR-United catalog and the source (Zenodo record / repo LICENSE)
+# disagree, the more restrictive one wins. "catalog-only" means the source repo has no
+# LICENSE file and the licence comes only from the catalog entry.
+#
+# Benchmark output for a subset (normalised geometry, splits, manifests) carries that
+# subset's licence; data is always fetched from the original source, never redistributed.
+#
+# Strata: ancient (<500), medieval (500-1499), early-modern (1500-1799), late (>=1800), mixed.
+# Tasks:  T = transcription, G = grounding. G-only where the text follows an edition.
+
+subsets:
+  # ───────────────────────── core · medieval ─────────────────────────
+  - {id: htromance-fr, name: "HTRomance Medieval French", url: "https://github.com/HTRomance-Project/medieval-french", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Latn, langs: [fro], centuries: "13-15", tasks: [T, G]}
+  - {id: htromance-it, name: "HTRomance Medieval Italian", url: "https://github.com/HTRomance-Project/medieval-italian", license: CC-BY-4.0, tier: core, stratum: medieval, script: Latn, langs: [ita, vec], centuries: "12-15", tasks: [T, G]}
+  - {id: htromance-lat, name: "HTRomance Medieval Latin", url: "https://github.com/HTRomance-Project/medieval-latin", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Latn, langs: [lat], centuries: "12-15", tasks: [T, G]}
+  - {id: htromance-spain, name: "HTRomance Middle Ages in Spain", url: "https://github.com/HTRomance-Project/middle-ages-in-spain", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Latn, langs: [lat, spa], centuries: "12-15", tasks: [T, G]}
+  - {id: cremma-medieval, name: "CREMMA Medieval", url: "https://github.com/HTR-United/cremma-medieval", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Latn, langs: [fro], centuries: "12-15", tasks: [T, G]}
+  - {id: cremma-medii-aevi, name: "CREMMA Medii Aevi", url: "https://github.com/HTR-United/CREMMA-Medieval-LAT", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Latn, langs: [lat], centuries: "12-16", tasks: [T, G]}
+  - {id: e-ndp, name: "e-NDP Notre-Dame chapter registers", url: "https://zenodo.org/records/7575693", license: CC-BY-4.0, tier: core, stratum: medieval, script: Latn, langs: [lat, fra], centuries: "14-16", tasks: [T, G], flags: [use-page-not-alto]}
+  - {id: koenigsfelden, name: "Charters and Records of Königsfelden Abbey", url: "https://doi.org/10.5281/zenodo.5179361", license: CC-BY-4.0, tier: core, stratum: medieval, script: Latn, langs: [lat, deu], centuries: "13-16", tasks: [T, G], flags: [large-21GB]}
+  - {id: icdar26-cmmhwr, name: "ICDAR 2026 CMMHWR26 (test split)", url: "https://zenodo.org/records/19884972", license: CC-BY-4.0, tier: core, stratum: medieval, script: Latn, langs: [spa, cat, fra, glg, ita, lat, vec, oci, ces], centuries: "13-15", tasks: [T, G], flags: [mufi-diplomatic, low-contamination]}
+  - {id: himanis-guerin, name: "HIMANIS Guérin", url: "https://zenodo.org/records/5535306", license: CC-BY-4.0, tier: core, stratum: medieval, script: Latn, langs: [fro, lat], centuries: "14-15", tasks: [G], flags: [edition-aligned-text]}
+  - {id: home-alcar, name: "HOME-Alcar cartularies", url: "https://zenodo.org/records/5600884", license: CC-BY-4.0, tier: core, stratum: medieval, script: Latn, langs: [lat, fro], centuries: "12-14", tasks: [G], flags: [edition-aligned-text, alto-rectangles, large-11GB]}
+  - {id: amsmb, name: "AMSMB HTR", url: "https://dataverse.bsc.es/citation?persistentId=perma:BSC/0VB0MC", license: CC-BY-SA-4.0, tier: core, stratum: medieval, script: Latn, langs: [lat, cat], centuries: "13-15", tasks: [T, G], flags: [share-alike]}
+  - {id: caroline-minuscule, name: "Caroline Minuscule (Rescribe)", url: "https://github.com/rescribe/carolineminuscule-groundtruth", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Latn, langs: [lat], centuries: "9-12", tasks: [T, G], flags: [small]}
+  - {id: gallicorpora-mss15, name: "Gallicorpora manuscrits du 15e", url: "https://github.com/Gallicorpora/HTR-MSS-15e-Siecle", license: CC-BY-4.0, licence_note: "catalog CC-BY, repo CC0", tier: core, stratum: medieval, script: Latn, langs: [frm], centuries: "15", tasks: [T, G]}
+  - {id: decameron-fr, name: "DecameronFR", url: "https://github.com/PSL-Chartes-HTR-Students/TNAH-2021-DecameronFR", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Latn, langs: [frm], centuries: "15", tasks: [T, G], flags: [small]}
+  - {id: fabliaux, name: "Fabliaux", url: "https://github.com/CIHAM-HTR/Fabliaux", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Latn, langs: [fro], centuries: "13-15", tasks: [T, G]}
+  - {id: liber, name: "Liber", url: "https://github.com/CIHAM-HTR/Liber", license: CC-BY-4.0, licence_note: "catalog CC-BY, repo MIT", tier: core, stratum: medieval, script: Latn, langs: [fro, lat], centuries: "14", tasks: [T, G]}
+  - {id: paris-bible, name: "Paris Bible Project", url: "https://github.com/parisbible/ground_truth", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Latn, langs: [lat], centuries: "13-14", tasks: [T, G], flags: [match-images-by-stem, small]}
+  - {id: transcriboquest-24, name: "TranscriboQuest 2024 Medieval Literary", url: "https://doi.org/10.5281/zenodo.13757440", license: CC-BY-4.0, tier: core, stratum: medieval, script: Latn, langs: [lat, dum, fro, gmh], centuries: "9-15", tasks: [T, G]}
+  - {id: transcriboquest-25-vern, name: "TranscriboQuest 2025 Medieval Vernacular", url: "https://doi.org/10.5281/zenodo.17062963", license: CC-BY-4.0, tier: core, stratum: medieval, script: Latn, langs: [fro, frm, mga, lat, osp], centuries: "11-15", tasks: [T, G]}
+  - {id: mhg-medieval, name: "Middle High German medieval manuscripts", url: "https://doi.org/10.5281/zenodo.17978574", license: CC-BY-4.0, tier: core, stratum: medieval, script: Latn, langs: [gmh], centuries: "15", tasks: [T, G]}
+  - {id: enhg-latf, name: "Early New High German diplomatic GT", url: "https://zenodo.org/records/21257167", license: CC-BY-4.0, tier: core, stratum: medieval, script: Latf, langs: [gmh], centuries: "15", tasks: [T, G]}
+  - {id: paderov-bible, name: "Padeřov Bible", url: "https://zenodo.org/record/7467034", license: CC-BY-4.0, tier: core, stratum: medieval, script: Latn, langs: [ces], centuries: "15", tasks: [T, G], flags: [alto-mm10]}
+  - {id: onb-2160, name: "ÖNB Cod. 2160", url: "https://zenodo.org/record/7467027", license: CC-BY-4.0, tier: core, stratum: medieval, script: Latn, langs: [lat], centuries: "9", tasks: [T, G], flags: [alto-mm10]}
+  - {id: onb-3891, name: "ÖNB Cod. 3891", url: "https://doi.org/10.5281/zenodo.7467249", license: CC-BY-4.0, tier: core, stratum: medieval, script: Latn, langs: [lat], centuries: "13", tasks: [T, G], flags: [use-page-not-alto]}
+  - {id: iforal, name: "iForal charters", url: "https://github.com/Arch-W/iForal-Dataset", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Latn, langs: [lat, por], centuries: "13-15", tasks: [T, G]}
+  - {id: eutyches, name: "Eutyches", url: "https://github.com/malamatenia/Eutyches", license: CC-BY-4.0, licence_note: "catalog CC-BY, repo Apache-2.0", tier: core, stratum: medieval, script: Latn, langs: [lat, grc], centuries: "9", tasks: [T, G]}
+  - {id: palatine-anthology, name: "Palatine Anthology HTR", url: "https://gitlab.huma-num.fr/ecrinum/anthologia/htr_cpgr23", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Grek, langs: [grc], centuries: "10", tasks: [T, G]}
+  - {id: stavronikita-53, name: "Stavronikita 53", url: "https://zenodo.org/records/5595669", license: CC-BY-4.0, tier: core, stratum: medieval, script: Grek, langs: [grc], centuries: "14", tasks: [T, G]}
+  - {id: stavronikita-114, name: "Stavronikita 114", url: "https://zenodo.org/records/5578251", license: CC-BY-4.0, tier: core, stratum: medieval, script: Grek, langs: [grc], centuries: "15", tasks: [T, G]}
+  - {id: syriac-smmj36, name: "Jerusalem SMMJ 36 (Syriac)", url: "https://doi.org/10.5281/zenodo.18157525", license: CC-BY-4.0, tier: core, stratum: medieval, script: Syre, langs: [syr], centuries: "12-14", tasks: [T, G]}
+  - {id: zenon-papyri, name: "Zenon Papyri", url: "https://zenodo.org/records/6565706", license: CC-BY-4.0, tier: core, stratum: ancient, script: Grek, langs: [grc], centuries: "-3", tasks: [T, G], flags: [small]}
+
+  # ─────────────────────── core · early modern ───────────────────────
+  - {id: eparchos, name: "EPARCHOS (BL Add. 6791)", url: "https://zenodo.org/records/4095301", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Grek, langs: [grc], centuries: "16", tasks: [T, G], flags: [polygons-no-baselines]}
+  - {id: stavronikita-79, name: "Stavronikita 79", url: "https://zenodo.org/records/5578136", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Grek, langs: [grc], centuries: "16", tasks: [T, G]}
+  - {id: syriac-onb-syr1, name: "ÖNB Cod. Syr. 1", url: "https://doi.org/10.5281/zenodo.14714089", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Syrj, langs: [syr], centuries: "16", tasks: [T, G]}
+  - {id: cremma-mss-16, name: "CREMMA MSS 16", url: "https://github.com/HTR-United/CREMMA-MSS-16", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Latn, langs: [fra], centuries: "16", tasks: [T, G], flags: [small]}
+  - {id: cremma-mss-17, name: "CREMMA MSS 17", url: "https://github.com/HTR-United/CREMMA-MSS-17", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Latn, langs: [fra], centuries: "17", tasks: [T, G]}
+  - {id: cremma-mss-18, name: "CREMMA MSS 18", url: "https://github.com/HTR-United/CREMMA-MSS-18", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Latn, langs: [fra], centuries: "18", tasks: [T, G]}
+  - {id: chateau-chavigny, name: "Château de Chavigny", url: "https://github.com/PSL-Chartes-HTR-Students/HN2021-ChateauChavigny", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: early-modern, script: Latn, langs: [frm], centuries: "16", tasks: [T, G], flags: [small]}
+  - {id: modern-roman-langs, name: "HTRomance Modern Roman Languages", url: "https://github.com/HTRomance-Project/modern-roman-languages", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Latn, langs: [fra], centuries: "17-18", tasks: [T, G]}
+  - {id: fondue-mss-18, name: "FONDUE-FR-MSS-18", url: "https://github.com/FoNDUE-HTR/FONDUE-FR-MSS-18", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: early-modern, script: Latn, langs: [fra], centuries: "18", tasks: [T, G]}
+  - {id: deu-1653, name: "German GT 1653-1656", url: "https://doi.org/10.5281/zenodo.15303398", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Latn, langs: [deu], centuries: "17", tasks: [T, G], flags: [small]}
+  - {id: deu-1673, name: "German GT 1673", url: "https://doi.org/10.5281/zenodo.15303243", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Latn, langs: [deu], centuries: "17", tasks: [T, G], flags: [small]}
+  - {id: titres-nobiliaires, name: "Titres nobiliaires 17e-18e", url: "https://github.com/HisMoDoc-HTR/TitresNobiliaires_17_18", license: Etalab-2.0, tier: core, stratum: early-modern, script: Latn, langs: [fra], centuries: "17-18", tasks: [T, G]}
+  - {id: calvin, name: "John Calvin's handwriting", url: "https://github.com/pippaJeanne/HTR-Jean-Calvin", license: CC-BY-SA-4.0, licence_note: "catalog CC-BY-SA, repo MIT", tier: core, stratum: early-modern, script: Latn, langs: [fra, frm], centuries: "16", tasks: [T, G], flags: [share-alike, small]}
+  - {id: lidi, name: "LiDi 1.0", url: "https://github.com/Giorgiaagostini/LiDi1.0-project", license: CC-BY-SA-4.0, licence_note: catalog-only, tier: core, stratum: early-modern, script: Latn, langs: [ita], centuries: "16", tasks: [T, G], flags: [share-alike]}
+  - {id: episearch, name: "EpiSearch HTR (Marciana)", url: "https://github.com/vedph/episearch-htr", license: CC-BY-SA-4.0, licence_note: "catalog CC-BY-SA, repo NOASSERTION", tier: core, stratum: early-modern, script: Latn, langs: [ita, lat], centuries: "18", tasks: [T, G], flags: [share-alike, small]}
+  - {id: bronod, name: "Notaires de Paris - Bronod", url: "https://github.com/HTR-United/lectaurep-bronod", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Latn, langs: [fra], centuries: "18", tasks: [T, G]}
+  - {id: staten-generaal, name: "Staten-Generaal 1.01.02", url: "https://zenodo.org/records/19551834", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Latn, langs: [nld], centuries: "16-18", tasks: [T, G], flags: [large-3.5GB]}
+  - {id: nl-misc-archives, name: "Dutch National Archives misc.", url: "https://zenodo.org/records/19450810", license: CC-BY-4.0, tier: core, stratum: mixed, script: Latn, langs: [nld], centuries: "16-19", tasks: [T, G], flags: [large-6.4GB]}
+  - {id: revolutionary-city, name: "Revolutionary City 1758-1805", url: "https://zenodo.org/records/15776323", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Latn, langs: [eng, fra], centuries: "18", tasks: [T, G], flags: [large-10GB]}
+  - {id: leibniz, name: "Leibniz manuscripts (clean subset)", url: "https://zenodo.org/records/21622297", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Latn, langs: [lat, fra, deu], centuries: "17-18", tasks: [T, G], flags: [clean-subset-only]}
+  - {id: bozen, name: "ICFHR 2016 Ratsprotokolle Bozen", url: "https://zenodo.org/records/1297399", license: CC-BY-4.0, tier: core, stratum: mixed, script: Latn, langs: [deu], centuries: "15-19", tasks: [T, G]}
+  - {id: chi-know-po, name: "CHI-KNOW-PO", url: "https://zenodo.org/records/14452717", license: CC-BY-4.0, licence_note: "repo Apache-2.0, Zenodo CC-BY", tier: core, stratum: mixed, script: Hant, langs: [lzh], centuries: "17-20", tasks: [T, G]}
+  - {id: rasam, name: "RASAM 1+2 (Maghrebi Arabic)", url: "https://github.com/calfa-co/rasam-dataset", license: Apache-2.0, tier: core, stratum: mixed, script: Arab, langs: [ara], centuries: "17-19", tasks: [T, G], flags: [images-via-bulac-iiif, check-image-size]}
+  - {id: agapet, name: "Agapet Christian Arabic", url: "https://zenodo.org/records/15473122", license: CC-BY-4.0, tier: core, stratum: mixed, script: Arab, langs: [ara], centuries: "13,17", tasks: [T, G], flags: [some-low-resolution]}
+  - {id: pinkas, name: "Pinkas (Hebrew/Yiddish ledgers)", url: "https://zenodo.org/records/3569694", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Hebr, langs: [heb, yid], centuries: "16-18", tasks: [T, G], flags: [small]}
+  - {id: pracalit, name: "Pracalit Sanskrit/Newar", url: "https://zenodo.org/records/6967421", license: CC-BY-4.0, tier: core, stratum: mixed, script: Newa, langs: [san, new], centuries: "16-19", tasks: [T, G]}
+
+  # ─────────────────────────── core · late ───────────────────────────
+  - {id: bentham-r0, name: "Bentham R0", url: "https://zenodo.org/records/44519", license: CC-BY-4.0, tier: core, stratum: late, script: Latn, langs: [eng], centuries: "18-19", tasks: [T, G], flags: [page-2010-points]}
+  - {id: norhand-v3, name: "NorHand v3", url: "https://zenodo.org/records/10255840", license: CC-BY-4.0, tier: core, stratum: late, script: Latn, langs: [nor], centuries: "19-20", tasks: [T, G]}
+  - {id: ajami, name: "Ajami (Fulfulde/Hausa/Wolof)", url: "https://zenodo.org/records/20392539", license: CC-BY-4.0, tier: core, stratum: late, script: Arab, langs: [ful, hau, wol], centuries: "19-20", tasks: [T, G], flags: [manual-folders-only]}
+
+  # ─────────────────────────── nc-extension ──────────────────────────
+  - {id: biblia, name: "BiblIA (medieval Hebrew)", url: "https://zenodo.org/records/5167263", license: CC-BY-NC-SA-4.0, licence_note: "catalog CC-BY-SA, Zenodo NC-SA", tier: nc-extension, stratum: medieval, script: Hebr, langs: [heb, arc], centuries: "10-16", tasks: [T, G], flags: [partial-images-132-of-202]}
+  - {id: castilian-late-med, name: "Late medieval Castilian", url: "https://doi.org/10.5281/zenodo.7386489", license: CC-BY-NC-SA-4.0, licence_note: "catalog CC-BY-SA, Zenodo NC-SA", tier: nc-extension, stratum: medieval, script: Latn, langs: [spa], centuries: "14-15", tasks: [T, G]}
+  - {id: tq25-latin, name: "TranscriboQuest 2025 Medieval Latin", url: "https://doi.org/10.5281/zenodo.17062009", license: CC-BY-NC-SA-4.0, tier: nc-extension, stratum: medieval, script: Latn, langs: [lat], centuries: "9-15", tasks: [T, G], flags: [some-pages-without-text]}
+  - {id: hpgtr, name: "HPGTR (Bodleian Greek)", url: "https://github.com/vivianpl/hpgtr", license: CC-BY-NC-SA-3.0, tier: nc-extension, stratum: mixed, script: Grek, langs: [grc], centuries: "10-16", tasks: [T, G]}
+  - {id: irhas, name: "IRHAS Aljamiado", url: "https://doi.org/10.5281/zenodo.21824878", license: CC-BY-NC-SA-4.0, licence_note: "catalog CC-BY-SA, Zenodo NC-SA", tier: nc-extension, stratum: mixed, script: Arab, langs: [osp, arg, ara], centuries: "15-17", tasks: [T, G], flags: [large-5.6GB]}
+  - {id: deu-1563, name: "German GT 1563-1569", url: "https://doi.org/10.5281/zenodo.5153263", license: CC-BY-NC-SA-4.0, licence_note: "catalog CC-BY-SA, Zenodo NC-SA", tier: nc-extension, stratum: early-modern, script: Latn, langs: [deu], centuries: "16", tasks: [T, G], flags: [alto-mm10]}
+  - {id: deu-1665, name: "German GT 1665", url: "https://doi.org/10.5281/zenodo.14356190", license: CC-BY-NC-SA-4.0, licence_note: "catalog NC-SA, Zenodo CC-BY", tier: nc-extension, stratum: early-modern, script: Latn, langs: [deu], centuries: "17", tasks: [T, G], flags: [small]}
+  - {id: muharaf, name: "Muharaf (public part)", url: "https://zenodo.org/records/11492215", license: CC-BY-NC-SA-4.0, tier: nc-extension, stratum: late, script: Arab, langs: [ara], centuries: "17-20", tasks: [T, G], flags: [use-21453896-baselines]}
+
+  # ─────────────────────────────── hold ──────────────────────────────
+  - {id: gwalther, name: "Gwalther Latin poems", url: "https://zenodo.org/records/4780947", license: unknown, licence_note: "catalog CC-BY, Zenodo other-open; read LICENSE file", tier: hold, stratum: early-modern, script: Latn, langs: [lat], centuries: "16", tasks: [T, G]}
+  - {id: distinguo, name: "DISTINGUO (medieval Latin)", url: "https://nakala.fr", license: CC-BY-4.0, licence_note: "nakala.fr timed out during audit; retry", tier: hold, stratum: medieval, script: Latn, langs: [lat], centuries: "13-15", tasks: [T, G]}
