@@ -1,12 +1,13 @@
-"""Command line entry point: inspect the subset registry."""
+"""Command line entry point: inspect the subset registry and ground-truth files."""
 
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from collections import Counter
 
-from apud_bench import registry
+from apud_bench import formats, registry
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -17,7 +18,15 @@ def main(argv: list[str] | None = None) -> int:
     list_cmd.add_argument("--stratum", choices=registry.STRATA)
     commands.add_parser("check", help="validate the registry against the licence rules")
     commands.add_parser("stats", help="summarise the registry")
+    inspect_cmd = commands.add_parser("inspect", help="read a PAGE/ALTO file as canvas JSON")
+    inspect_cmd.add_argument("path")
+    inspect_cmd.add_argument("--image-size", metavar="WxH", help="real page image size")
     args = parser.parse_args(argv)
+
+    if args.command == "inspect":
+        size = tuple(int(n) for n in args.image_size.split("x")) if args.image_size else None
+        print(json.dumps(formats.load(args.path, size).to_dict(), ensure_ascii=False, indent=2))
+        return 0
 
     subsets = registry.load()
     if args.command == "check":

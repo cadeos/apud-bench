@@ -14,7 +14,8 @@ tasks:
 Existing HTR benchmarks for VLMs score reading only. Document-grounding benchmarks use modern
 PDFs. `apud-bench` brings grounding and citation to manuscripts, across scripts and centuries.
 
-Status: pre-alpha. The subset registry is in place; loaders and evaluation are next.
+Status: pre-alpha. Subset registry and PAGE/ALTO readers are in place; download, build and
+evaluation are next.
 
 ## Data
 
@@ -34,7 +35,17 @@ Every derived artefact carries the licence of the subset it comes from. See
 uv run apud-bench stats          # registry summary
 uv run apud-bench list --tier core
 uv run apud-bench check          # enforce licence/tier rules
+uv run apud-bench inspect page.xml --image-size 4000x6000   # PAGE/ALTO -> canvas JSON
 ```
+
+### Ground-truth formats
+
+`apud_bench.formats.load()` reads PAGE (2010-03-19 to 2019-07-15) and ALTO (v2 to v4) into one
+model, `Page` -> `Line` (text, polygon, baseline, bbox), in **canvas coordinates**: pixels of the
+full-resolution page image. It handles `points` attributes and 2010 `<Point>` children, ALTO
+polygons written as `x,y` or `x y`, rectangle-only lines, scalar and point baselines, and
+Transkribus `mm10` units. Passing the real image size rescales ground truth produced on resized
+images.
 
 ## Credits
 
