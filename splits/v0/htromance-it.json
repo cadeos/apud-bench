@@ -1,0 +1,33 @@
+{
+  "subset": "htromance-it",
+  "version": "v0",
+  "seed": 0,
+  "source": {
+    "kind": "github",
+    "repo": "HTRomance-Project/medieval-italian",
+    "commit": "af3644de3abf2aae544766675e15311aac1963c7",
+    "url": "https://codeload.github.com/HTRomance-Project/medieval-italian/tar.gz/af3644de3abf2aae544766675e15311aac1963c7"
+  },
+  "pages": [
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-1534/btv1b52504356m_f100.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-1534/btv1b52504356m_f99.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-434/btv1b84363869_f15.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-434/btv1b84363869_f18.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-481/btv1b84268148_f89.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-481/btv1b84268148_f91.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-583/btv1b84333085_f85.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-583/btv1b84333085_f87.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-590/btv1b8433319z_f39.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-590/btv1b8433319z_f42.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-594/btv1b8433322f_f56.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-594/btv1b8433322f_f59.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-70/btv1b8426803g_f166.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-70/btv1b8426803g_f168.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-783/btv1b52515037r_f29.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-783/btv1b52515037r_f30.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-79/btv1b52507492w_f113.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-79/btv1b52507492w_f116.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-820/btv1b52500670h_f11.chocomufin.xml",
+    "medieval-italian-af3644de3abf2aae544766675e15311aac1963c7/data/bnf-it-912/btv1b52501692k_f13.chocomufin.xml"
+  ]
+}

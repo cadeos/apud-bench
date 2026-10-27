@@ -1,0 +1,39 @@
+{
+  "subset": "eparchos",
+  "version": "v0",
+  "seed": 0,
+  "source": {
+    "kind": "zenodo",
+    "record": 4095301,
+    "files": [
+      {
+        "key": "eparchos.zip",
+        "size": 114677656,
+        "checksum": "md5:e172aa8b4017436e37cf25991b5bf8b8",
+        "url": "https://zenodo.org/api/records/4095301/files/eparchos.zip/content"
+      }
+    ]
+  },
+  "pages": [
+    "eparchos/xml/6791 (1).xml",
+    "eparchos/xml/6791 (11).xml",
+    "eparchos/xml/6791 (15).xml",
+    "eparchos/xml/6791 (28).xml",
+    "eparchos/xml/6791 (32).xml",
+    "eparchos/xml/6791 (34).xml",
+    "eparchos/xml/6791 (36).xml",
+    "eparchos/xml/6791 (45).xml",
+    "eparchos/xml/6791 (49).xml",
+    "eparchos/xml/6791 (55).xml",
+    "eparchos/xml/6791 (61).xml",
+    "eparchos/xml/6791 (67).xml",
+    "eparchos/xml/6791 (69).xml",
+    "eparchos/xml/6791 (7).xml",
+    "eparchos/xml/6791 (72).xml",
+    "eparchos/xml/6791 (73).xml",
+    "eparchos/xml/6791 (9).xml",
+    "eparchos/xml/6971 (114).xml",
+    "eparchos/xml/6971 (119).xml",
+    "eparchos/xml/6971 (89).xml"
+  ]
+}

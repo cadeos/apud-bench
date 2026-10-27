@@ -14,8 +14,8 @@ tasks:
 Existing HTR benchmarks for VLMs score reading only. Document-grounding benchmarks use modern
 PDFs. `apud-bench` brings grounding and citation to manuscripts, across scripts and centuries.
 
-Status: pre-alpha. Subset registry and PAGE/ALTO readers are in place; download, build and
-evaluation are next.
+Status: pre-alpha. The pipeline runs end to end on four pilot subsets; model runners and the
+citation-faithfulness task are next.
 
 ## Data
 
@@ -78,6 +78,33 @@ equals the image pixel size, so ground-truth coordinates are canvas coordinates.
 Ground truth is written to `annotations/<page>.json` as W3C annotations (`xywh` and SVG
 polygon selectors). These pages are **not linked from the manifest**: a model browsing the
 manifest cannot read the answers. Use `--base-url` when the data is hosted elsewhere.
+
+### Splits, tasks and scoring
+
+```bash
+uv run apud-bench split htromance-it eparchos --pages 20      # freeze splits/v0/<subset>.json
+uv run apud-bench tasks htromance-it eparchos --out items.jsonl
+uv run apud-bench baseline --items items.jsonl --kind oracle --out oracle.jsonl
+uv run apud-bench evaluate --items items.jsonl --predictions oracle.jsonl
+```
+
+- **Splits** are evaluation-only page lists, drawn round-robin across manuscripts with a fixed
+  seed and committed in `splits/v0/`. Each split records the source pin it was drawn from and
+  is refused against any other version of the data.
+- **Items** are addressed by IIIF identifiers (manifest, canvas, `xywh`), so a model or an
+  agent using `apud-mcp` works from the IIIF data, never from local files.
+  - `transcription`: read the text of a canvas region;
+  - `grounding`: given a line of text, return its box on the canvas. Lines shorter than five
+    characters and lines whose text repeats on the same page are excluded as ambiguous.
+- **Predictions** are JSON lines: `{"id", "text"}` or `{"id", "bbox": [x, y, w, h]}`. Missing
+  or malformed predictions score as the worst answer.
+- **Metrics**: CER and WER at two normalisation levels, `strict` (NFC, whitespace) and `loose`
+  (also no combining marks, case folded, long s and r rotunda modernised); mean IoU and
+  accuracy at IoU 0.25 / 0.5 / 0.75. Reported micro-averaged (`overall`), as an unweighted
+  mean over subsets (`macro`), and per subset.
+
+`baseline --kind oracle` (perfect) and `--kind trivial` (empty text, whole-canvas box) bound the
+metrics: on the four pilot subsets they score CER 0 / 1 and mean IoU 1 / 0.013.
 
 ## Credits
 

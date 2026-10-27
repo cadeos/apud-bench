@@ -1,0 +1,33 @@
+{
+  "subset": "fabliaux",
+  "version": "v0",
+  "seed": 0,
+  "source": {
+    "kind": "github",
+    "repo": "CIHAM-HTR/Fabliaux",
+    "commit": "8df34b4f12ea7d872a82d5ff588a5f6120c0883c",
+    "url": "https://codeload.github.com/CIHAM-HTR/Fabliaux/tar.gz/8df34b4f12ea7d872a82d5ff588a5f6120c0883c"
+  },
+  "pages": [
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bern_354/e-codices_bbb-0354_146v_max.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bern_354/e-codices_bbb-0354_147r_max.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bern_354/e-codices_bbb-0354_148r_max.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bern_354/e-codices_bbb-0354_148v_max.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_Mazzarine_1553/btv1b8454669r_f1015.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_Mazzarine_1553/btv1b8454669r_f1016.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_Mazzarine_1553/btv1b8454669r_f1018.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_Mazzarine_1553/btv1b8454669r_f1019.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_fr_1593/Français_1593__btv1b6000803p_307.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_fr_1593/Français_1593__btv1b6000803p_309.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_fr_1593/Français_1593__btv1b6000803p_310.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_fr_1593/Français_1593__btv1b6000803p_370.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_fr_25545/btv1b10525826x_f161.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_fr_25545/btv1b10525826x_f162.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_fr_25545/btv1b10525826x_f163.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_fr_25545/btv1b10525826x_f165.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_fr_837/Recueil_de_fabliaux_dits_contes_[...]Hugues_Piaucelle_btv1b55013464t_142.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_fr_837/Recueil_de_fabliaux_dits_contes_[...]Hugues_Piaucelle_btv1b55013464t_143.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_fr_837/Recueil_de_fabliaux_dits_contes_[...]Hugues_Piaucelle_btv1b55013464t_144.mufichecker.xml",
+    "Fabliaux-8df34b4f12ea7d872a82d5ff588a5f6120c0883c/data/bnf_fr_837/Recueil_de_fabliaux_dits_contes_[...]Hugues_Piaucelle_btv1b55013464t_145.mufichecker.xml"
+  ]
+}

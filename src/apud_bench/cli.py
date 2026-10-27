@@ -9,7 +9,7 @@ from collections import Counter
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from apud_bench import formats, iiif, registry, sources
+from apud_bench import evaluate, formats, iiif, registry, sources, splits, tasks
 from apud_bench.build import build
 from apud_bench.fetch import data_dir, fetch
 
@@ -47,6 +47,26 @@ def main(argv: list[str] | None = None) -> int:
                 default=DEFAULT_BASE_URL,
                 help="public URL of <data-dir>/iiif (default: %(default)s, see `serve`)",
             )
+    split_cmd = commands.add_parser("split", help="draw and freeze the evaluation split")
+    split_cmd.add_argument("subsets", nargs="+", metavar="SUBSET")
+    split_cmd.add_argument("--pages", type=int, default=20, help="pages per subset (%(default)s)")
+    split_cmd.add_argument("--seed", type=int, default=0)
+    split_cmd.add_argument("--data-dir", type=Path, default=None)
+    tasks_cmd = commands.add_parser("tasks", help="write transcription and grounding items")
+    tasks_cmd.add_argument("subsets", nargs="+", metavar="SUBSET")
+    tasks_cmd.add_argument("--out", type=Path, required=True, help="items JSONL to write")
+    tasks_cmd.add_argument("--base-url", default=DEFAULT_BASE_URL)
+    tasks_cmd.add_argument("--data-dir", type=Path, default=None)
+    tasks_cmd.add_argument(
+        "--task", choices=("transcription", "grounding"), action="append", dest="task_names"
+    )
+    baseline_cmd = commands.add_parser("baseline", help="write oracle or trivial predictions")
+    baseline_cmd.add_argument("--items", type=Path, required=True)
+    baseline_cmd.add_argument("--kind", choices=("oracle", "trivial"), required=True)
+    baseline_cmd.add_argument("--out", type=Path, required=True)
+    eval_cmd = commands.add_parser("evaluate", help="score predictions against items")
+    eval_cmd.add_argument("--items", type=Path, required=True)
+    eval_cmd.add_argument("--predictions", type=Path, required=True)
     serve_cmd = commands.add_parser("serve", help="serve <data-dir>/iiif over HTTP with CORS")
     serve_cmd.add_argument("--port", type=int, default=8000)
     serve_cmd.add_argument("--data-dir", type=Path, default=None)
@@ -61,7 +81,18 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(formats.load(args.path, size).to_dict(), ensure_ascii=False, indent=2))
         return 0
 
+    if args.command in ("baseline", "evaluate"):
+        items = _read_jsonl(args.items)
+        if args.command == "baseline":
+            _write_jsonl(args.out, evaluate.baseline(items, args.kind))
+            return 0
+        predictions = {p["id"]: p for p in _read_jsonl(args.predictions)}
+        print(json.dumps(evaluate.score(items, predictions), indent=2))
+        return 0
+
     subsets = registry.load()
+    if args.command in ("split", "tasks"):
+        return _evaluation_data(args, {s.id: s for s in subsets})
     if args.command in ("lock", "fetch", "build", "iiif"):
         return _pipeline(args, {s.id: s for s in subsets})
     if args.command == "check":
@@ -136,6 +167,50 @@ def _pipeline(args: argparse.Namespace, by_id: dict[str, registry.Subset]) -> in
                     f"skipped: {skipped}"
                 )
     return 0
+
+
+def _evaluation_data(args: argparse.Namespace, by_id: dict[str, registry.Subset]) -> int:
+    unknown = [s for s in args.subsets if s not in by_id]
+    if unknown:
+        print(f"unknown subsets: {', '.join(unknown)}", file=sys.stderr)
+        return 2
+    root = args.data_dir or data_dir()
+    lock = sources.read_lock()
+    all_items: list[dict] = []
+    for subset_id in args.subsets:
+        pages_file = root / "build" / subset_id / "pages.jsonl"
+        if subset_id not in lock or not pages_file.exists():
+            print(f"{subset_id}: not built yet, run `apud-bench build` first", file=sys.stderr)
+            return 2
+        if args.command == "split":
+            built = [json.loads(line)["xml_path"] for line in pages_file.open(encoding="utf-8")]
+            chosen = splits.draw(built, args.pages, args.seed)
+            path = splits.write(subset_id, lock[subset_id], chosen, args.seed)
+            documents = len({splits.document_of(p) for p in chosen})
+            print(f"{subset_id}: {len(chosen)} pages from {documents} documents -> {path}")
+            continue
+        chosen = splits.read(subset_id, lock[subset_id])
+        pages = tasks.select_pages(pages_file, chosen)
+        names = tuple(args.task_names or ("transcription", "grounding"))
+        subset_items = tasks.items(subset_id, pages, args.base_url, names)
+        counts = Counter(i["task"] for i in subset_items)
+        print(f"{subset_id}: " + ", ".join(f"{n} {counts[n]}" for n in names))
+        all_items.extend(subset_items)
+    if args.command == "tasks":
+        _write_jsonl(args.out, all_items)
+        print(f"{len(all_items)} items -> {args.out}")
+    return 0
+
+
+def _read_jsonl(path: Path) -> list[dict]:
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+
+
+def _write_jsonl(path: Path, rows: list[dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as out:
+        for row in rows:
+            out.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
 def _serve(directory: Path, port: int) -> None:

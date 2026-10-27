@@ -1,0 +1,45 @@
+{
+  "subset": "syriac-onb-syr1",
+  "version": "v0",
+  "seed": 0,
+  "source": {
+    "kind": "zenodo",
+    "record": 14714089,
+    "files": [
+      {
+        "key": "page.zip",
+        "size": 1113171,
+        "checksum": "md5:1e06e5814a3c08daf4e9158289231dc1",
+        "url": "https://zenodo.org/api/records/14714089/files/page.zip/content"
+      },
+      {
+        "key": "images.zip",
+        "size": 468604566,
+        "checksum": "md5:a890f61ac5caa1a62c141327be56b696",
+        "url": "https://zenodo.org/api/records/14714089/files/images.zip/content"
+      }
+    ]
+  },
+  "pages": [
+    "page/0010_00000025.xml",
+    "page/0011_00000026.xml",
+    "page/0026_00000041.xml",
+    "page/0029_00000044.xml",
+    "page/0080_00000095.xml",
+    "page/0086_00000101.xml",
+    "page/0131_00000146.xml",
+    "page/0152_00000167.xml",
+    "page/0164_00000179.xml",
+    "page/0177_00000192.xml",
+    "page/0182_00000197.xml",
+    "page/0188_00000203.xml",
+    "page/0192_00000207.xml",
+    "page/0210_00000225.xml",
+    "page/0211_00000226.xml",
+    "page/0228_00000243.xml",
+    "page/0252_00000267.xml",
+    "page/0256_00000271.xml",
+    "page/0258_00000273.xml",
+    "page/0315_00000330.xml"
+  ]
+}
