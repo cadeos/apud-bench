@@ -47,6 +47,22 @@ polygons written as `x,y` or `x y`, rectangle-only lines, scalar and point basel
 Transkribus `mm10` units. Passing the real image size rescales ground truth produced on resized
 images.
 
+### Building subsets
+
+```bash
+uv run apud-bench lock htromance-it eparchos      # pin sources in subsets/sources.lock.json
+uv run apud-bench build htromance-it eparchos     # download, verify, extract, normalise
+```
+
+- **lock** pins each source: the GitHub commit SHA, or the exact Zenodo record version with
+  per-file checksums. Builds only use what the lock file says, so they are reproducible.
+- **fetch/build** download into `$APUD_BENCH_DATA` (default `~/.cache/apud-bench`), verify
+  checksums and extract safely (no path traversal, no links, size cap).
+- **build** pairs every PAGE/ALTO file with its image (declared file name first, then file
+  stem, nearest folder wins), reads the real image size, rescales the ground truth to it, and
+  writes `build/<subset>/pages.jsonl` plus `report.json` with counts and every skipped file by
+  reason (`no-image`, `aspect-mismatch`, `duplicate-image`, `no-lines`, ...).
+
 ## Credits
 
 All ground truth belongs to its creators; each subset entry links to its source. Please cite

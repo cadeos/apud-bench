@@ -1,0 +1,44 @@
+{
+  "eparchos": {
+    "kind": "zenodo",
+    "record": 4095301,
+    "files": [
+      {
+        "key": "eparchos.zip",
+        "size": 114677656,
+        "checksum": "md5:e172aa8b4017436e37cf25991b5bf8b8",
+        "url": "https://zenodo.org/api/records/4095301/files/eparchos.zip/content"
+      }
+    ]
+  },
+  "fabliaux": {
+    "kind": "github",
+    "repo": "CIHAM-HTR/Fabliaux",
+    "commit": "8df34b4f12ea7d872a82d5ff588a5f6120c0883c",
+    "url": "https://codeload.github.com/CIHAM-HTR/Fabliaux/tar.gz/8df34b4f12ea7d872a82d5ff588a5f6120c0883c"
+  },
+  "htromance-it": {
+    "kind": "github",
+    "repo": "HTRomance-Project/medieval-italian",
+    "commit": "af3644de3abf2aae544766675e15311aac1963c7",
+    "url": "https://codeload.github.com/HTRomance-Project/medieval-italian/tar.gz/af3644de3abf2aae544766675e15311aac1963c7"
+  },
+  "syriac-onb-syr1": {
+    "kind": "zenodo",
+    "record": 14714089,
+    "files": [
+      {
+        "key": "page.zip",
+        "size": 1113171,
+        "checksum": "md5:1e06e5814a3c08daf4e9158289231dc1",
+        "url": "https://zenodo.org/api/records/14714089/files/page.zip/content"
+      },
+      {
+        "key": "images.zip",
+        "size": 468604566,
+        "checksum": "md5:a890f61ac5caa1a62c141327be56b696",
+        "url": "https://zenodo.org/api/records/14714089/files/images.zip/content"
+      }
+    ]
+  }
+}

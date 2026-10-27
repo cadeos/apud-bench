@@ -15,11 +15,14 @@
 #
 # Strata: ancient (<500), medieval (500-1499), early-modern (1500-1799), late (>=1800), mixed.
 # Tasks:  T = transcription, G = grounding. G-only where the text follows an edition.
+# fetch:  optional download hints, e.g. which files of a Zenodo record to take.
+# build:  optional build hints, e.g. xml_glob when a source ships several transcription layers
+#         (HTRomance: original *.xml and CATMuS-normalised *.chocomufin.xml per page).
 
 subsets:
   # ───────────────────────── core · medieval ─────────────────────────
   - {id: htromance-fr, name: "HTRomance Medieval French", url: "https://github.com/HTRomance-Project/medieval-french", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Latn, langs: [fro], centuries: "13-15", tasks: [T, G]}
-  - {id: htromance-it, name: "HTRomance Medieval Italian", url: "https://github.com/HTRomance-Project/medieval-italian", license: CC-BY-4.0, tier: core, stratum: medieval, script: Latn, langs: [ita, vec], centuries: "12-15", tasks: [T, G]}
+  - {id: htromance-it, name: "HTRomance Medieval Italian", url: "https://github.com/HTRomance-Project/medieval-italian", license: CC-BY-4.0, tier: core, stratum: medieval, script: Latn, langs: [ita, vec], centuries: "12-15", tasks: [T, G], build: {xml_glob: "*.chocomufin.xml"}}
   - {id: htromance-lat, name: "HTRomance Medieval Latin", url: "https://github.com/HTRomance-Project/medieval-latin", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Latn, langs: [lat], centuries: "12-15", tasks: [T, G]}
   - {id: htromance-spain, name: "HTRomance Middle Ages in Spain", url: "https://github.com/HTRomance-Project/middle-ages-in-spain", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Latn, langs: [lat, spa], centuries: "12-15", tasks: [T, G]}
   - {id: cremma-medieval, name: "CREMMA Medieval", url: "https://github.com/HTR-United/cremma-medieval", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Latn, langs: [fro], centuries: "12-15", tasks: [T, G]}
@@ -48,13 +51,13 @@ subsets:
   - {id: palatine-anthology, name: "Palatine Anthology HTR", url: "https://gitlab.huma-num.fr/ecrinum/anthologia/htr_cpgr23", license: CC-BY-4.0, licence_note: catalog-only, tier: core, stratum: medieval, script: Grek, langs: [grc], centuries: "10", tasks: [T, G]}
   - {id: stavronikita-53, name: "Stavronikita 53", url: "https://zenodo.org/records/5595669", license: CC-BY-4.0, tier: core, stratum: medieval, script: Grek, langs: [grc], centuries: "14", tasks: [T, G]}
   - {id: stavronikita-114, name: "Stavronikita 114", url: "https://zenodo.org/records/5578251", license: CC-BY-4.0, tier: core, stratum: medieval, script: Grek, langs: [grc], centuries: "15", tasks: [T, G]}
-  - {id: syriac-smmj36, name: "Jerusalem SMMJ 36 (Syriac)", url: "https://doi.org/10.5281/zenodo.18157525", license: CC-BY-4.0, tier: core, stratum: medieval, script: Syre, langs: [syr], centuries: "12-14", tasks: [T, G]}
+  - {id: syriac-smmj36, name: "Jerusalem SMMJ 36 (Syriac)", url: "https://doi.org/10.5281/zenodo.18157525", license: CC-BY-4.0, tier: core, stratum: medieval, script: Syre, langs: [syr], centuries: "12-14", tasks: [T, G], fetch: {files: [page.zip, images.zip]}}
   - {id: zenon-papyri, name: "Zenon Papyri", url: "https://zenodo.org/records/6565706", license: CC-BY-4.0, tier: core, stratum: ancient, script: Grek, langs: [grc], centuries: "-3", tasks: [T, G], flags: [small]}
 
   # ─────────────────────── core · early modern ───────────────────────
   - {id: eparchos, name: "EPARCHOS (BL Add. 6791)", url: "https://zenodo.org/records/4095301", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Grek, langs: [grc], centuries: "16", tasks: [T, G], flags: [polygons-no-baselines]}
   - {id: stavronikita-79, name: "Stavronikita 79", url: "https://zenodo.org/records/5578136", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Grek, langs: [grc], centuries: "16", tasks: [T, G]}
-  - {id: syriac-onb-syr1, name: "ÖNB Cod. Syr. 1", url: "https://doi.org/10.5281/zenodo.14714089", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Syrj, langs: [syr], centuries: "16", tasks: [T, G]}
+  - {id: syriac-onb-syr1, name: "ÖNB Cod. Syr. 1", url: "https://doi.org/10.5281/zenodo.14714089", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Syrj, langs: [syr], centuries: "16", tasks: [T, G], fetch: {files: [page.zip, images.zip]}}
   - {id: cremma-mss-16, name: "CREMMA MSS 16", url: "https://github.com/HTR-United/CREMMA-MSS-16", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Latn, langs: [fra], centuries: "16", tasks: [T, G], flags: [small]}
   - {id: cremma-mss-17, name: "CREMMA MSS 17", url: "https://github.com/HTR-United/CREMMA-MSS-17", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Latn, langs: [fra], centuries: "17", tasks: [T, G]}
   - {id: cremma-mss-18, name: "CREMMA MSS 18", url: "https://github.com/HTR-United/CREMMA-MSS-18", license: CC-BY-4.0, tier: core, stratum: early-modern, script: Latn, langs: [fra], centuries: "18", tasks: [T, G]}

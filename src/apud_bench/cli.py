@@ -1,4 +1,4 @@
-"""Command line entry point: inspect the subset registry and ground-truth files."""
+"""Command line entry point: registry, ground-truth files, and the lock/fetch/build pipeline."""
 
 from __future__ import annotations
 
@@ -6,8 +6,11 @@ import argparse
 import json
 import sys
 from collections import Counter
+from pathlib import Path
 
-from apud_bench import formats, registry
+from apud_bench import formats, registry, sources
+from apud_bench.build import build
+from apud_bench.fetch import data_dir, fetch
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -21,6 +24,19 @@ def main(argv: list[str] | None = None) -> int:
     inspect_cmd = commands.add_parser("inspect", help="read a PAGE/ALTO file as canvas JSON")
     inspect_cmd.add_argument("path")
     inspect_cmd.add_argument("--image-size", metavar="WxH", help="real page image size")
+    for name, help_text in (
+        ("lock", "pin subset sources (GitHub commit, Zenodo version) in the lock file"),
+        ("fetch", "download and extract pinned sources"),
+        ("build", "fetch, then normalise pages into pages.jsonl and report.json"),
+    ):
+        cmd = commands.add_parser(name, help=help_text)
+        cmd.add_argument("subsets", nargs="+", metavar="SUBSET")
+        cmd.add_argument(
+            "--data-dir",
+            type=Path,
+            help="cache directory (default: $APUD_BENCH_DATA or ~/.cache/apud-bench)",
+        )
+        cmd.set_defaults(data_dir=None)
     args = parser.parse_args(argv)
 
     if args.command == "inspect":
@@ -29,6 +45,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     subsets = registry.load()
+    if args.command in ("lock", "fetch", "build"):
+        return _pipeline(args, {s.id: s for s in subsets})
     if args.command == "check":
         errors = registry.validate(subsets)
         for error in errors:
@@ -45,6 +63,52 @@ def main(argv: list[str] | None = None) -> int:
             continue
         print(f"{s.id:26} {s.tier:13} {s.license:18} {s.script:5} {s.centuries:8} {s.name}")
     return 0
+
+
+def _pipeline(args: argparse.Namespace, by_id: dict[str, registry.Subset]) -> int:
+    unknown = [s for s in args.subsets if s not in by_id]
+    if unknown:
+        print(f"unknown subsets: {', '.join(unknown)}", file=sys.stderr)
+        return 2
+    held = [s for s in args.subsets if by_id[s].tier == "hold"]
+    if held:
+        print(f"subsets on hold cannot be used: {', '.join(held)}", file=sys.stderr)
+        return 2
+    root = args.data_dir or data_dir()
+    lock = sources.read_lock()
+
+    with sources.client() as http:
+        if args.command == "lock":
+            for subset_id in args.subsets:
+                lock[subset_id] = sources.resolve(by_id[subset_id], http)
+                print(f"{subset_id}: pinned {_describe(lock[subset_id])}")
+            sources.write_lock(lock)
+            return 0
+
+        missing = [s for s in args.subsets if s not in lock]
+        if missing:
+            print(f"not in lock file, run `apud-bench lock` first: {', '.join(missing)}")
+            return 2
+        for subset_id in args.subsets:
+            source = fetch(subset_id, lock[subset_id], http, root)
+            print(f"{subset_id}: source ready at {source}")
+            if args.command == "build":
+                report = build(
+                    by_id[subset_id], lock[subset_id], source, root / "build" / subset_id
+                )
+                skipped = ", ".join(f"{k} {v}" for k, v in report.skipped.items()) or "none"
+                print(
+                    f"{subset_id}: {report.pages} pages, {report.lines} lines "
+                    f"({report.empty_lines} empty, {report.lines_out_of_bounds} out of bounds); "
+                    f"skipped: {skipped}"
+                )
+    return 0
+
+
+def _describe(pin: dict) -> str:
+    if pin["kind"] == "github":
+        return f"github {pin['repo']}@{pin['commit'][:10]}"
+    return f"zenodo record {pin['record']} ({len(pin['files'])} files)"
 
 
 if __name__ == "__main__":

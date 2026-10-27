@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 import yaml
 
@@ -36,6 +36,8 @@ class Subset:
     tasks: list[Task]
     flags: list[str] = field(default_factory=list)
     licence_note: str | None = None
+    fetch: dict[str, Any] | None = None
+    build: dict[str, Any] | None = None
 
     @property
     def share_alike(self) -> bool:
