@@ -14,6 +14,7 @@ from apud_bench.build import build
 from apud_bench.fetch import data_dir, fetch
 
 DEFAULT_BASE_URL = "http://localhost:8000"
+RUN_CONDITIONS = ("transcription:region", "transcription:page", "grounding:page")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -67,6 +68,22 @@ def main(argv: list[str] | None = None) -> int:
     eval_cmd = commands.add_parser("evaluate", help="score predictions against items")
     eval_cmd.add_argument("--items", type=Path, required=True)
     eval_cmd.add_argument("--predictions", type=Path, required=True)
+    eval_cmd.add_argument("--task", choices=("transcription", "grounding"), help="score one task")
+    run_cmd = commands.add_parser("run", help="query a model on items (needs the runners extra)")
+    run_cmd.add_argument("--items", type=Path, required=True)
+    run_cmd.add_argument("--condition", required=True, choices=RUN_CONDITIONS)
+    run_cmd.add_argument("--out", type=Path, required=True, help="run directory (resumable)")
+    run_cmd.add_argument("--provider", choices=("anthropic", "openai"), default="anthropic")
+    run_cmd.add_argument("--model", help="model id (default: claude-opus-5-5 for anthropic)")
+    run_cmd.add_argument("--effort", default="medium", help="anthropic effort (%(default)s)")
+    run_cmd.add_argument("--base-url", help="openai-compatible endpoint URL")
+    run_cmd.add_argument("--api-key-env", default="OPENAI_API_KEY", help="env var with the key")
+    run_cmd.add_argument("--max-side", type=int, help="override the image long-edge limit")
+    run_cmd.add_argument("--group-size", type=int, default=10, help="lines per page call")
+    run_cmd.add_argument("--pages-per-subset", type=int, help="only the first N pages")
+    run_cmd.add_argument("--workers", type=int, default=4)
+    run_cmd.add_argument("--dry-run", action="store_true", help="fetch images, estimate cost")
+    run_cmd.add_argument("--price-in", type=float, default=4.0, help="$ per 1M input tokens")
     serve_cmd = commands.add_parser("serve", help="serve <data-dir>/iiif over HTTP with CORS")
     serve_cmd.add_argument("--port", type=int, default=8000)
     serve_cmd.add_argument("--data-dir", type=Path, default=None)
@@ -81,8 +98,13 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(formats.load(args.path, size).to_dict(), ensure_ascii=False, indent=2))
         return 0
 
+    if args.command == "run":
+        return _run(args)
+
     if args.command in ("baseline", "evaluate"):
         items = _read_jsonl(args.items)
+        if getattr(args, "task", None):
+            items = [i for i in items if i["task"] == args.task]
         if args.command == "baseline":
             _write_jsonl(args.out, evaluate.baseline(items, args.kind))
             return 0
@@ -200,6 +222,37 @@ def _evaluation_data(args: argparse.Namespace, by_id: dict[str, registry.Subset]
         _write_jsonl(args.out, all_items)
         print(f"{len(all_items)} items -> {args.out}")
     return 0
+
+
+def _run(args: argparse.Namespace) -> int:
+    # Imported lazily: model SDKs and apud are optional (`pip install apud-bench[runners]`).
+    from apud_bench.runners import run as runner
+
+    if args.provider == "anthropic":
+        from apud_bench.runners.claude import DEFAULT_MODEL, ClaudeProvider
+
+        provider = ClaudeProvider(args.model or DEFAULT_MODEL, args.effort)
+    else:
+        from apud_bench.runners.openai_compatible import OpenAICompatibleProvider
+
+        if not args.model:
+            print("--model is required for the openai provider", file=sys.stderr)
+            return 2
+        provider = OpenAICompatibleProvider(args.model, args.base_url, args.api_key_env)
+    if args.max_side:
+        provider.max_side = args.max_side
+    items = _read_jsonl(args.items)
+    languages = {s.id: s.langs for s in registry.load()}
+    jobs = runner.plan(items, args.condition, args.group_size, args.pages_per_subset)
+    summary = runner.run(
+        provider, jobs, runner.ImageSource(), args.out, languages, args.workers, args.dry_run
+    )
+    if args.dry_run:
+        tokens = summary["estimated_image_tokens"] + summary["estimated_prompt_tokens"]
+        summary["estimated_input_cost_usd"] = round(tokens / 1e6 * args.price_in, 2)
+        summary["note"] = "estimate covers input only; output and thinking tokens are extra"
+    print(json.dumps(summary, indent=2))
+    return 1 if summary["errors"] else 0
 
 
 def _read_jsonl(path: Path) -> list[dict]:

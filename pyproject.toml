@@ -15,6 +15,13 @@ dependencies = [
 [project.scripts]
 apud-bench = "apud_bench.cli:main"
 
+[project.optional-dependencies]
+runners = [
+    "anthropic>=2.3",
+    "apud>=0.0.2",
+    "openai>=3.39",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

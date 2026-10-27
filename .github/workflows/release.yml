@@ -18,7 +18,7 @@ jobs:
               echo "::error::$f has version $v, tag is $GITHUB_REF_NAME"; exit 1
             fi
           done
-      - run: uv sync
+      - run: uv sync --extra runners
       - run: uv run pytest
       - run: uv build -o dist
       - uses: actions/upload-artifact@v4

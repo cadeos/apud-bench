@@ -106,6 +106,39 @@ uv run apud-bench evaluate --items items.jsonl --predictions oracle.jsonl
 `baseline --kind oracle` (perfect) and `--kind trivial` (empty text, whole-canvas box) bound the
 metrics: on the four pilot subsets they score CER 0 / 1 and mean IoU 1 / 0.013.
 
+### Running models
+
+```bash
+pip install "apud-bench[runners]"      # adds apud, anthropic and openai SDKs
+uv run apud-bench serve &              # the IIIF data the models will read
+
+# estimate first: fetches every image through IIIF, calls no model
+uv run apud-bench run --items items.jsonl --condition grounding:page --out runs/opus --dry-run
+
+uv run apud-bench run --items items.jsonl --condition grounding:page --out runs/opus \
+    --provider anthropic --model claude-opus-5-5 --effort medium --pages-per-subset 2
+uv run apud-bench evaluate --items items.jsonl --task grounding --predictions runs/opus/predictions.jsonl
+```
+
+Three conditions isolate what the model is good at:
+
+| Condition | The model sees | Calls |
+|---|---|---|
+| `transcription:region` | only the IIIF crop of one line | one per line |
+| `transcription:page` | the whole page and numbered line boxes | one per up to 10 lines |
+| `grounding:page` | the whole page and numbered line texts | one per up to 10 lines |
+
+Comparing `transcription:region` with `transcription:page` measures what region access through
+IIIF is worth. Images are always fetched through IIIF with `apud`, at the model's own maximum
+resolution; boxes are converted between image pixels and canvas coordinates by the runner.
+
+Runs are resumable: `predictions.jsonl` and `calls.jsonl` are appended per call, and finished
+items are never paid for twice. Failed calls are logged and retried on the next run; refusals are
+recorded and score as missing. Providers: `anthropic` (Claude, official SDK; no refusal
+fallback, so the named model is always the one scored) and `openai` (OpenAI and any
+OpenAI-compatible endpoint via `--base-url`). Credentials come from the environment
+(`ANTHROPIC_API_KEY`, or the variable named by `--api-key-env`).
+
 ## Credits
 
 All ground truth belongs to its creators; each subset entry links to its source. Please cite
