@@ -63,6 +63,22 @@ uv run apud-bench build htromance-it eparchos     # download, verify, extract, n
   writes `build/<subset>/pages.jsonl` plus `report.json` with counts and every skipped file by
   reason (`no-image`, `aspect-mismatch`, `duplicate-image`, `no-lines`, ...).
 
+### Static IIIF
+
+```bash
+uv run apud-bench iiif htromance-it eparchos      # Level 0 tiles + manifests
+uv run apud-bench serve                           # http://localhost:8000, with CORS
+```
+
+Each built subset is published under `<data-dir>/iiif/<subset>/` as a IIIF Image API 3
+**Level 0** service per page (512 px tiles, `sizes` matching the pyramid levels, `full/max`)
+and one Presentation 3 `manifest.json`, so any IIIF viewer or client can open it. Canvas size
+equals the image pixel size, so ground-truth coordinates are canvas coordinates.
+
+Ground truth is written to `annotations/<page>.json` as W3C annotations (`xywh` and SVG
+polygon selectors). These pages are **not linked from the manifest**: a model browsing the
+manifest cannot read the answers. Use `--base-url` when the data is hosted elsewhere.
+
 ## Credits
 
 All ground truth belongs to its creators; each subset entry links to its source. Please cite

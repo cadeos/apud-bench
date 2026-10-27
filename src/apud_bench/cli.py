@@ -6,11 +6,14 @@ import argparse
 import json
 import sys
 from collections import Counter
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from apud_bench import formats, registry, sources
+from apud_bench import formats, iiif, registry, sources
 from apud_bench.build import build
 from apud_bench.fetch import data_dir, fetch
+
+DEFAULT_BASE_URL = "http://localhost:8000"
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -28,6 +31,7 @@ def main(argv: list[str] | None = None) -> int:
         ("lock", "pin subset sources (GitHub commit, Zenodo version) in the lock file"),
         ("fetch", "download and extract pinned sources"),
         ("build", "fetch, then normalise pages into pages.jsonl and report.json"),
+        ("iiif", "publish built pages as static IIIF (Level 0 tiles, manifest, ground truth)"),
     ):
         cmd = commands.add_parser(name, help=help_text)
         cmd.add_argument("subsets", nargs="+", metavar="SUBSET")
@@ -37,7 +41,20 @@ def main(argv: list[str] | None = None) -> int:
             help="cache directory (default: $APUD_BENCH_DATA or ~/.cache/apud-bench)",
         )
         cmd.set_defaults(data_dir=None)
+        if name == "iiif":
+            cmd.add_argument(
+                "--base-url",
+                default=DEFAULT_BASE_URL,
+                help="public URL of <data-dir>/iiif (default: %(default)s, see `serve`)",
+            )
+    serve_cmd = commands.add_parser("serve", help="serve <data-dir>/iiif over HTTP with CORS")
+    serve_cmd.add_argument("--port", type=int, default=8000)
+    serve_cmd.add_argument("--data-dir", type=Path, default=None)
     args = parser.parse_args(argv)
+
+    if args.command == "serve":
+        _serve((args.data_dir or data_dir()) / "iiif", args.port)
+        return 0
 
     if args.command == "inspect":
         size = tuple(int(n) for n in args.image_size.split("x")) if args.image_size else None
@@ -45,7 +62,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     subsets = registry.load()
-    if args.command in ("lock", "fetch", "build"):
+    if args.command in ("lock", "fetch", "build", "iiif"):
         return _pipeline(args, {s.id: s for s in subsets})
     if args.command == "check":
         errors = registry.validate(subsets)
@@ -92,6 +109,22 @@ def _pipeline(args: argparse.Namespace, by_id: dict[str, registry.Subset]) -> in
         for subset_id in args.subsets:
             source = fetch(subset_id, lock[subset_id], http, root)
             print(f"{subset_id}: source ready at {source}")
+            if args.command == "iiif":
+                pages_file = root / "build" / subset_id / "pages.jsonl"
+                if not pages_file.exists():
+                    print(f"{subset_id}: not built yet, run `apud-bench build` first")
+                    return 2
+                subset = by_id[subset_id]
+                count = iiif.publish(
+                    subset_id,
+                    subset.name,
+                    subset.license,
+                    pages_file,
+                    source,
+                    root / "iiif" / subset_id,
+                    args.base_url,
+                )
+                print(f"{subset_id}: {count} canvases at {args.base_url}/{subset_id}/manifest.json")
             if args.command == "build":
                 report = build(
                     by_id[subset_id], lock[subset_id], source, root / "build" / subset_id
@@ -103,6 +136,19 @@ def _pipeline(args: argparse.Namespace, by_id: dict[str, registry.Subset]) -> in
                     f"skipped: {skipped}"
                 )
     return 0
+
+
+def _serve(directory: Path, port: int) -> None:
+    class Handler(SimpleHTTPRequestHandler):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, directory=str(directory), **kwargs)
+
+        def end_headers(self) -> None:
+            self.send_header("Access-Control-Allow-Origin", "*")
+            super().end_headers()
+
+    print(f"serving {directory} at http://localhost:{port}/")
+    ThreadingHTTPServer(("127.0.0.1", port), Handler).serve_forever()
 
 
 def _describe(pin: dict) -> str:
