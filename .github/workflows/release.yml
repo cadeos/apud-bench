@@ -1,0 +1,40 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Check tag matches package versions
+        run: |
+          for f in pyproject.toml; do
+            v=$(grep -m1 '^version = ' "$f" | cut -d'"' -f2)
+            if [ "v$v" != "$GITHUB_REF_NAME" ]; then
+              echo "::error::$f has version $v, tag is $GITHUB_REF_NAME"; exit 1
+            fi
+          done
+      - run: uv sync
+      - run: uv run pytest
+      - run: uv build -o dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write  # PyPI Trusted Publishing, no stored token
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
